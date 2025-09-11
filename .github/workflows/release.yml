@@ -1,0 +1,106 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Get tag name
+      id: tag_name
+      run: |
+        if [[ $GITHUB_REF == refs/tags/* ]]; then
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        else
+          echo "TAG_NAME=latest" >> $GITHUB_OUTPUT
+        fi
+        echo "Tag name will be: ${GITHUB_REF#refs/tags/}"
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Build app (unsigned)
+      run: |
+        echo "Building Promptify..."
+        xcodebuild -scheme Promptify \
+                   -configuration Release \
+                   -derivedDataPath build \
+                   -destination 'platform=macOS' \
+                   CODE_SIGN_IDENTITY="" \
+                   CODE_SIGNING_REQUIRED=NO \
+                   CODE_SIGNING_ALLOWED=NO \
+                   ONLY_ACTIVE_ARCH=NO \
+                   clean build
+    
+    - name: Verify build output
+      run: |
+        echo "Checking build output..."
+        ls -la build/Build/Products/Release/
+        if [ ! -d "build/Build/Products/Release/Promptify.app" ]; then
+          echo "❌ Promptify.app not found!"
+          exit 1
+        fi
+        echo "✅ Promptify.app found"
+        
+    - name: Create DMG
+      run: |
+        # Create a temporary folder for DMG contents
+        mkdir -p dmg-contents
+        cp -r "build/Build/Products/Release/Promptify.app" dmg-contents/
+        
+        # Create Applications symlink
+        ln -s /Applications dmg-contents/Applications
+        
+        # Create DMG with proper settings
+        hdiutil create -volname "Promptify Installer" \
+                       -srcfolder dmg-contents \
+                       -ov -format UDZO \
+                       -imagekey zlib-level=9 \
+                       "Promptify-${{ steps.tag_name.outputs.TAG_NAME }}.dmg"
+        
+        # Verify DMG was created
+        ls -la *.dmg
+        echo "✅ DMG created successfully"
+        
+    - name: Create ZIP archive
+      run: |
+        # Create ZIP archive as alternative download
+        cd dmg-contents
+        zip -r "../Promptify-${{ steps.tag_name.outputs.TAG_NAME }}.zip" Promptify.app
+        cd ..
+        echo "✅ ZIP archive created"
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          ./Promptify-${{ steps.tag_name.outputs.TAG_NAME }}.dmg
+          ./Promptify-${{ steps.tag_name.outputs.TAG_NAME }}.zip
+        body: |
+          ## Changes in this release
+          - Settings UI improvements and reorganization
+          - Enhanced translation features
+          - Better user experience with faster popups
+          
+          ## Installation
+          1. Download the DMG file below
+          2. Open it and drag Promptify.app to Applications folder
+          3. Run the app and grant accessibility permissions when prompted
+          
+          ## Requirements
+          - macOS 12.0 or later
+          - OpenAI API key (get one from https://platform.openai.com)

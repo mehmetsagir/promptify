@@ -1,0 +1,604 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		37E7A7D52E72307500F2F45E /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 37E7A7D42E72307500F2F45E /* HotKey */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3749EF932E6D1F5D00C324D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3749EF7C2E6D1F5C00C324D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3749EF832E6D1F5C00C324D7;
+			remoteInfo = Promptify;
+		};
+		3749EF9D2E6D1F5D00C324D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3749EF7C2E6D1F5C00C324D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3749EF832E6D1F5C00C324D7;
+			remoteInfo = Promptify;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3749EF842E6D1F5C00C324D7 /* Promptify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Promptify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3749EF922E6D1F5D00C324D7 /* PromptifyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromptifyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3749EF9C2E6D1F5D00C324D7 /* PromptifyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromptifyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3749EF862E6D1F5C00C324D7 /* Promptify */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Promptify;
+			sourceTree = "<group>";
+		};
+		3749EF952E6D1F5D00C324D7 /* PromptifyTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PromptifyTests;
+			sourceTree = "<group>";
+		};
+		3749EF9F2E6D1F5D00C324D7 /* PromptifyUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PromptifyUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3749EF812E6D1F5C00C324D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				37E7A7D52E72307500F2F45E /* HotKey in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF8F2E6D1F5D00C324D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF992E6D1F5D00C324D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3749EF7B2E6D1F5C00C324D7 = {
+			isa = PBXGroup;
+			children = (
+				3749EF862E6D1F5C00C324D7 /* Promptify */,
+				3749EF952E6D1F5D00C324D7 /* PromptifyTests */,
+				3749EF9F2E6D1F5D00C324D7 /* PromptifyUITests */,
+				3749EFB82E6D21B100C324D7 /* Frameworks */,
+				3749EF852E6D1F5C00C324D7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3749EF852E6D1F5C00C324D7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3749EF842E6D1F5C00C324D7 /* Promptify.app */,
+				3749EF922E6D1F5D00C324D7 /* PromptifyTests.xctest */,
+				3749EF9C2E6D1F5D00C324D7 /* PromptifyUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3749EFB82E6D21B100C324D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3749EF832E6D1F5C00C324D7 /* Promptify */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3749EFA62E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "Promptify" */;
+			buildPhases = (
+				3749EF802E6D1F5C00C324D7 /* Sources */,
+				3749EF812E6D1F5C00C324D7 /* Frameworks */,
+				3749EF822E6D1F5C00C324D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3749EF862E6D1F5C00C324D7 /* Promptify */,
+			);
+			name = Promptify;
+			packageProductDependencies = (
+				37E7A7D42E72307500F2F45E /* HotKey */,
+			);
+			productName = Promptify;
+			productReference = 3749EF842E6D1F5C00C324D7 /* Promptify.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3749EF912E6D1F5D00C324D7 /* PromptifyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3749EFA92E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "PromptifyTests" */;
+			buildPhases = (
+				3749EF8E2E6D1F5D00C324D7 /* Sources */,
+				3749EF8F2E6D1F5D00C324D7 /* Frameworks */,
+				3749EF902E6D1F5D00C324D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3749EF942E6D1F5D00C324D7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3749EF952E6D1F5D00C324D7 /* PromptifyTests */,
+			);
+			name = PromptifyTests;
+			packageProductDependencies = (
+			);
+			productName = PromptifyTests;
+			productReference = 3749EF922E6D1F5D00C324D7 /* PromptifyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3749EF9B2E6D1F5D00C324D7 /* PromptifyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3749EFAC2E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "PromptifyUITests" */;
+			buildPhases = (
+				3749EF982E6D1F5D00C324D7 /* Sources */,
+				3749EF992E6D1F5D00C324D7 /* Frameworks */,
+				3749EF9A2E6D1F5D00C324D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3749EF9E2E6D1F5D00C324D7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3749EF9F2E6D1F5D00C324D7 /* PromptifyUITests */,
+			);
+			name = PromptifyUITests;
+			packageProductDependencies = (
+			);
+			productName = PromptifyUITests;
+			productReference = 3749EF9C2E6D1F5D00C324D7 /* PromptifyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3749EF7C2E6D1F5C00C324D7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					3749EF832E6D1F5C00C324D7 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					3749EF912E6D1F5D00C324D7 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 3749EF832E6D1F5C00C324D7;
+					};
+					3749EF9B2E6D1F5D00C324D7 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 3749EF832E6D1F5C00C324D7;
+					};
+				};
+			};
+			buildConfigurationList = 3749EF7F2E6D1F5C00C324D7 /* Build configuration list for PBXProject "Promptify" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3749EF7B2E6D1F5C00C324D7;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				37E7A7D32E72307000F2F45E /* XCRemoteSwiftPackageReference "HotKey" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3749EF852E6D1F5C00C324D7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3749EF832E6D1F5C00C324D7 /* Promptify */,
+				3749EF912E6D1F5D00C324D7 /* PromptifyTests */,
+				3749EF9B2E6D1F5D00C324D7 /* PromptifyUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3749EF822E6D1F5C00C324D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF902E6D1F5D00C324D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF9A2E6D1F5D00C324D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3749EF802E6D1F5C00C324D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF8E2E6D1F5D00C324D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3749EF982E6D1F5D00C324D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3749EF942E6D1F5D00C324D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3749EF832E6D1F5C00C324D7 /* Promptify */;
+			targetProxy = 3749EF932E6D1F5D00C324D7 /* PBXContainerItemProxy */;
+		};
+		3749EF9E2E6D1F5D00C324D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3749EF832E6D1F5C00C324D7 /* Promptify */;
+			targetProxy = 3749EF9D2E6D1F5D00C324D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3749EFA42E6D1F5D00C324D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3749EFA52E6D1F5D00C324D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		3749EFA72E6D1F5D00C324D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Promptify/Promptify.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Promptify;
+				INFOPLIST_KEY_NSAccessibilityUsageDescription = "Promptify needs accessibility access to read selected text, replace text in applications, and interact with UI elements for text enhancement features.";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Promptify needs to send Apple Events to simulate keyboard shortcuts (Cmd+C, Cmd+V) for copying and pasting enhanced text.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSInputMonitoringUsageDescription = "Promptify needs input monitoring access to detect global keyboard shortcuts and hotkeys for quick text enhancement.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Promptify needs microphone access to record your voice for prompt enhancement and translation features.";
+				INFOPLIST_KEY_NSSystemAdministrationUsageDescription = "Promptify needs system administration access to monitor global keyboard shortcuts and interact with other applications.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.Promptify;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3749EFA82E6D1F5D00C324D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Promptify/Promptify.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Promptify;
+				INFOPLIST_KEY_NSAccessibilityUsageDescription = "Promptify needs accessibility access to read selected text, replace text in applications, and interact with UI elements for text enhancement features.";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Promptify needs to send Apple Events to simulate keyboard shortcuts (Cmd+C, Cmd+V) for copying and pasting enhanced text.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSInputMonitoringUsageDescription = "Promptify needs input monitoring access to detect global keyboard shortcuts and hotkeys for quick text enhancement.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Promptify needs microphone access to record your voice for prompt enhancement and translation features.";
+				INFOPLIST_KEY_NSSystemAdministrationUsageDescription = "Promptify needs system administration access to monitor global keyboard shortcuts and interact with other applications.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.Promptify;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3749EFAA2E6D1F5D00C324D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.PromptifyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Promptify.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Promptify";
+			};
+			name = Debug;
+		};
+		3749EFAB2E6D1F5D00C324D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.PromptifyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Promptify.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Promptify";
+			};
+			name = Release;
+		};
+		3749EFAD2E6D1F5D00C324D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.PromptifyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Promptify;
+			};
+			name = Debug;
+		};
+		3749EFAE2E6D1F5D00C324D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS58TRK7UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mehmetsagir.PromptifyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Promptify;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3749EF7F2E6D1F5C00C324D7 /* Build configuration list for PBXProject "Promptify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3749EFA42E6D1F5D00C324D7 /* Debug */,
+				3749EFA52E6D1F5D00C324D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3749EFA62E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "Promptify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3749EFA72E6D1F5D00C324D7 /* Debug */,
+				3749EFA82E6D1F5D00C324D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3749EFA92E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "PromptifyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3749EFAA2E6D1F5D00C324D7 /* Debug */,
+				3749EFAB2E6D1F5D00C324D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3749EFAC2E6D1F5D00C324D7 /* Build configuration list for PBXNativeTarget "PromptifyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3749EFAD2E6D1F5D00C324D7 /* Debug */,
+				3749EFAE2E6D1F5D00C324D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		37E7A7D32E72307000F2F45E /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		37E7A7D42E72307500F2F45E /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 37E7A7D32E72307000F2F45E /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 3749EF7C2E6D1F5C00C324D7 /* Project object */;
+}
