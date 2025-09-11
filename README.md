@@ -1,4 +1,4 @@
-# Promptify v0.0.1
+# Promptify v0.0.2
 
 A powerful macOS app that enhances your text with AI assistance. Transform ordinary text into well-structured prompts and translate between languages with keyboard shortcuts.
 

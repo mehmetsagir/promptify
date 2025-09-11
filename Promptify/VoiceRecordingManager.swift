@@ -22,6 +22,7 @@ class VoiceRecordingManager: NSObject, ObservableObject {
     private var currentMode: VoiceRecordingMode = .transcription
     private var previousVolume: Int = 50 // Default volume level
     private var isVolumeControlEnabled = true // Flag to enable/disable volume control
+    private var microphonePermissionChecked = false // Cache permission check
     
     // Silence detection properties
     private var hasDetectedAudio = false
@@ -46,10 +47,38 @@ class VoiceRecordingManager: NSObject, ObservableObject {
     }
     
     func checkMicrophonePermission() async -> Bool {
-        // Force request microphone permission
-        let hasPermission = await Permission.requestMicrophonePermission()
-        print("🎤 Microphone permission check result: \(hasPermission)")
-        return hasPermission
+        // If we already checked and got permission, don't check again
+        if microphonePermissionChecked {
+            let currentStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+            if currentStatus == .authorized {
+                return true
+            } else {
+                // Permission was revoked, reset cache
+                microphonePermissionChecked = false
+            }
+        }
+        
+        // First check current status without requesting
+        let currentStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+        
+        switch currentStatus {
+        case .authorized:
+            print("🎤 Microphone permission already granted")
+            microphonePermissionChecked = true
+            return true
+        case .notDetermined:
+            print("🎤 Microphone permission not determined, requesting...")
+            let hasPermission = await Permission.requestMicrophonePermission()
+            print("🎤 Microphone permission request result: \(hasPermission)")
+            microphonePermissionChecked = hasPermission
+            return hasPermission
+        case .denied, .restricted:
+            print("🎤 Microphone permission denied/restricted")
+            return false
+        @unknown default:
+            print("🎤 Unknown microphone permission status: \(currentStatus.rawValue)")
+            return false
+        }
     }
     
     // MARK: - System Volume Control

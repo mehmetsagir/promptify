@@ -81,14 +81,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var instances = AppInstances.shared
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Ensure app appears in dock
-        NSApplication.shared.setActivationPolicy(.regular)
+        // Set activation policy based on user preference
+        updateActivationPolicy()
         
         // Show settings window on first launch
         if !UserDefaults.standard.bool(forKey: "hasLaunchedBefore") {
             DispatchQueue.main.async {
                 self.instances.settingsManager.showSettings(self.instances.appState, self.instances.updateManager)
             }
+        }
+    }
+    
+    /// Update activation policy based on hideFromDock setting
+    func updateActivationPolicy() {
+        let hideFromDock = UserDefaults.standard.bool(forKey: "hideFromDock")
+        
+        if hideFromDock {
+            NSApplication.shared.setActivationPolicy(.accessory)
+            print("🫥 App hidden from dock")
+        } else {
+            NSApplication.shared.setActivationPolicy(.regular)
+            print("👁️ App visible in dock")
         }
     }
     

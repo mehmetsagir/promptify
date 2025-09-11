@@ -914,8 +914,13 @@ final class AppState: ObservableObject {
     // MARK: - Dock Visibility
     private func updateDockVisibility() {
         DispatchQueue.main.async {
-            // Always show in dock for this version
-            NSApp.setActivationPolicy(.regular)
+            if self.hideFromDock {
+                NSApp.setActivationPolicy(.accessory)
+                print("🫥 App hidden from dock")
+            } else {
+                NSApp.setActivationPolicy(.regular)
+                print("👁️ App visible in dock")
+            }
         }
     }
     

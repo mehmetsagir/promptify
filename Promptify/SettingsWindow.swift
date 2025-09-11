@@ -5,9 +5,6 @@ import Foundation
 class SettingsWindowManager: ObservableObject {
     private var settingsWindow: NSWindow?
     
-    // Delegate'in serbest bırakılmaması için anahtar
-    private static var delegateKey = "delegateKey"
-    
     func showSettings(_ appState: AppState, _ updateManager: UpdateManager) {
         if settingsWindow == nil {
             let settingsView = SettingsView(appState: appState, updateManager: updateManager) {
@@ -28,10 +25,8 @@ class SettingsWindowManager: ObservableObject {
             settingsWindow?.center()
             settingsWindow?.isReleasedWhenClosed = false
             
-            let delegate = SettingsWindowDelegate(manager: self)
-            settingsWindow?.delegate = delegate
-            // Delegate'in serbest bırakılmaması için bir referans tutuyoruz
-            objc_setAssociatedObject(settingsWindow, &SettingsWindowManager.delegateKey, delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            // Configure window to not terminate app when closed
+            settingsWindow?.delegate = nil
         }
         
         settingsWindow?.makeKeyAndOrderFront(nil)
@@ -44,17 +39,6 @@ class SettingsWindowManager: ObservableObject {
     }
 }
 
-class SettingsWindowDelegate: NSObject, NSWindowDelegate {
-    weak var manager: SettingsWindowManager?
-    
-    init(manager: SettingsWindowManager) {
-        self.manager = manager
-    }
-    
-    func windowWillClose(_ notification: Notification) {
-        manager?.closeSettings()
-    }
-}
 
 struct SettingsView: View {
     @ObservedObject var appState: AppState
