@@ -1,13 +1,15 @@
-# Promptify
+# Promptify v0.0.1
 
 A powerful macOS app that enhances your text with AI assistance. Transform ordinary text into well-structured prompts and translate between languages with keyboard shortcuts.
 
 ## Features
 
-- **Prompt Enhancement**: Transform basic text into detailed, effective AI prompts
+- **Voice-to-Text**: Record voice and convert to text using OpenAI Whisper
+- **Prompt Enhancement**: Transform basic text into detailed, effective AI prompts  
 - **Translation**: Bidirectional translation between multiple languages
 - **Global Hotkeys**: Quick access from anywhere on macOS
 - **Accessibility Integration**: Works seamlessly with any text field
+- **Audio Feedback**: Optional sound notifications for better user experience
 - **Multiple AI Models**: Support for GPT-3.5 Turbo, GPT-4, and GPT-4 Turbo
 
 ## Download
