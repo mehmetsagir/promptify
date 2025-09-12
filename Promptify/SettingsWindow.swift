@@ -15,7 +15,7 @@ class SettingsWindowManager: ObservableObject {
             
             settingsWindow = NSWindow(
                 contentRect: NSRect(x: 0, y: 0, width: 520, height: 780),
-                styleMask: [.titled, .closable, .miniaturizable],
+                styleMask: [.titled, .closable, .miniaturizable, .resizable],
                 backing: .buffered,
                 defer: false
             )
@@ -24,6 +24,10 @@ class SettingsWindowManager: ObservableObject {
             settingsWindow?.contentView = hostingView
             settingsWindow?.center()
             settingsWindow?.isReleasedWhenClosed = false
+            
+            // Set minimum and maximum window size constraints
+            settingsWindow?.minSize = NSSize(width: 480, height: 600)
+            settingsWindow?.maxSize = NSSize(width: 950, height: 950)
             
             // Configure window to not terminate app when closed
             settingsWindow?.delegate = nil
@@ -99,13 +103,15 @@ struct SettingsView: View {
             
             Spacer()
             
-            // Footer with Permissions
-            VStack(spacing: 10) {
-                permissionSection
+            // Footer with Permissions (only show in General tab)
+            if selectedTab == 0 {
+                VStack(spacing: 10) {
+                    permissionSection
+                }
             }
         }
         .padding(24)
-        .frame(width: 520, height: 680)
+        .frame(minWidth: 480, maxWidth: 1000, minHeight: 600, maxHeight: 1000)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.hasAccessibility = Permission.hasAccessibility
@@ -813,28 +819,44 @@ struct SettingsView: View {
                     
                     VStack(spacing: 8) {
                         Button("🔍 Run Permission Diagnostic") {
-                            let _ = PermissionDiagnostic.performDiagnostic()
+                            let result = PermissionDiagnostic.performDiagnostic()
                             
                             let alert = NSAlert()
                             alert.messageText = "Permission Diagnostic Complete"
-                            alert.informativeText = "Check the console output for detailed results. If issues persist, try the reset option below."
+                            
+                            // Show detailed results in alert
+                            let diagnosticInfo = """
+                            Current System Status:
+                            • Accessibility: \(result.accessibility ? "✅ Granted" : "❌ Missing")
+                            • Input Monitoring: \(result.inputMonitoring ? "✅ Granted" : "❌ Missing") 
+                            • Microphone: \(result.microphone ? "✅ Granted" : "❌ Missing")
+                            
+                            Check console for detailed analysis.
+                            """
+                            
+                            alert.informativeText = diagnosticInfo
                             alert.addButton(withTitle: "OK")
                             alert.runModal()
                         }
                         .frame(maxWidth: .infinity)
                         
-                        Button("🧹 Reset Permission State") {
+                        Button("🧹 Reset App Permission Cache") {
                             let alert = NSAlert()
-                            alert.messageText = "Reset Permission State"
-                            alert.informativeText = "This will clear all cached permission states and force fresh checks. You may need to re-grant permissions. Continue?"
-                            alert.alertStyle = .warning
-                            alert.addButton(withTitle: "Reset")
+                            alert.messageText = "Reset Permission Cache"
+                            alert.informativeText = "This will clear the app's cached permission states and force fresh system checks. This does NOT revoke actual system permissions.\n\nTo fully reset permissions, you need to manually remove Promptify from System Settings > Privacy & Security."
+                            alert.alertStyle = .informational
+                            alert.addButton(withTitle: "Reset Cache")
                             alert.addButton(withTitle: "Cancel")
                             
                             if alert.runModal() == .alertFirstButtonReturn {
                                 PermissionDiagnostic.resetPermissionState()
                                 
-                                // Refresh permission states
+                                // Refresh permission states immediately
+                                self.hasAccessibility = Permission.hasAccessibility
+                                self.hasInputMonitoring = Permission.hasInputMonitoring()
+                                self.hasMicrophone = Permission.hasMicrophone
+                                
+                                // Also refresh after a short delay to ensure system check is complete
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     self.hasAccessibility = Permission.hasAccessibility
                                     self.hasInputMonitoring = Permission.hasInputMonitoring()
@@ -842,13 +864,34 @@ struct SettingsView: View {
                                 }
                                 
                                 let successAlert = NSAlert()
-                                successAlert.messageText = "Permission State Reset"
-                                successAlert.informativeText = "Permission cache has been cleared. Please check the permissions section below and re-grant any missing permissions."
+                                successAlert.messageText = "Permission Cache Reset"
+                                successAlert.informativeText = "App permission cache cleared. Fresh system checks will now be performed. Check the General tab to see updated permission status."
                                 successAlert.addButton(withTitle: "OK")
                                 successAlert.runModal()
                             }
                         }
                         .frame(maxWidth: .infinity)
+                        
+                        Button("🔧 Open System Permission Settings") {
+                            let alert = NSAlert()
+                            alert.messageText = "Reset System Permissions"
+                            alert.informativeText = "To completely reset permissions:\n\n1. This will open System Settings\n2. Go to Privacy & Security\n3. Find Promptify in Accessibility, Input Monitoring, and Microphone\n4. Remove Promptify from each section\n5. Restart Promptify to re-request permissions"
+                            alert.addButton(withTitle: "Open Settings")
+                            alert.addButton(withTitle: "Cancel")
+                            
+                            if alert.runModal() == .alertFirstButtonReturn {
+                                // Open all relevant privacy panes
+                                Permission.openPrivacyPane(for: .accessibility)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    Permission.openPrivacyPane(for: .inputMonitoring)
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    Permission.openPrivacyPane(for: .microphone)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .buttonStyle(.borderedProminent)
                     }
                 }
                 .padding(.vertical, 8)
@@ -1000,16 +1043,6 @@ struct SettingsView: View {
                                 .foregroundColor(.secondary)
                             Spacer()
                             Text(ProcessInfo.processInfo.operatingSystemVersionString)
-                                .font(.caption)
-                                .fontWeight(.medium)
-                        }
-                        
-                        HStack {
-                            Text("Bundle ID:")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Spacer()
-                            Text(Bundle.main.bundleIdentifier ?? "Unknown")
                                 .font(.caption)
                                 .fontWeight(.medium)
                         }

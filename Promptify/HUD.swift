@@ -82,6 +82,23 @@ final class HUD {
         }
         panel?.orderOut(nil)
     }
+    
+    /// Force reset the HUD panel - useful for fixing state issues
+    static func forceReset() {
+        print("🔄 HUD: Force resetting panel...")
+        panel?.orderOut(nil)
+        panel = nil
+        hosting = nil
+        // Panel will be recreated on next show
+    }
+    
+    /// Hide and reset the panel completely
+    static func hideAndReset() {
+        print("🔄 HUD: Hiding and resetting panel...")
+        panel?.orderOut(nil)
+        panel = nil
+        hosting = nil
+    }
 
     // ---- Sonuç: metni göster + Copy/Close
     static func showResult(_ resultText: String, title: String = "Promptify") {
@@ -155,10 +172,33 @@ final class HUD {
     }
     
     private static func centerBottom() {
-        if let screen = NSScreen.main?.visibleFrame, let p = panel {
-            let x = screen.midX - p.frame.width/2
-            let y = screen.minY + 20 // Ekranın altından 20px yukarıda
+        guard let screen = NSScreen.main?.visibleFrame, let p = panel else {
+            print("❌ HUD: Cannot position panel - screen or panel not available")
+            return
+        }
+        
+        let panelWidth = p.frame.width
+        let panelHeight = p.frame.height
+        
+        // Calculate position with safety margins
+        let x = max(screen.minX + 10, min(screen.midX - panelWidth/2, screen.maxX - panelWidth - 10))
+        let y = max(screen.minY + 20, screen.minY + 20) // At least 20px from bottom
+        
+        // Ensure panel fits within screen bounds
+        if x + panelWidth <= screen.maxX && y + panelHeight <= screen.maxY {
             p.setFrameOrigin(NSPoint(x: x, y: y))
+            print("📍 HUD: Panel positioned at (\(x), \(y))")
+        } else {
+            // Fallback to center if bottom positioning fails
+            let centerX = screen.midX - panelWidth/2
+            let centerY = screen.midY - panelHeight/2
+            p.setFrameOrigin(NSPoint(x: centerX, y: centerY))
+            print("⚠️ HUD: Using center position as fallback")
+        }
+        
+        // Make sure panel is visible
+        if !p.isVisible {
+            p.makeKeyAndOrderFront(nil)
         }
     }
 }

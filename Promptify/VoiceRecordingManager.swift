@@ -222,11 +222,16 @@ class VoiceRecordingManager: NSObject, ObservableObject {
             return
         }
         
-        // If not recording but processing, interrupt and start new recording
+        // If not recording, start new recording with proper HUD management
         if !isRecording {
             print("🎤 Starting new recording with mode: \(mode)")
-            // Hide any current HUD first
-            HUD.hide()
+            
+            // Force reset HUD to prevent state issues
+            HUD.forceReset()
+            
+            // Small delay to ensure HUD state is clean
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
+            
             await startRecording(mode: mode)
         }
     }
@@ -346,6 +351,12 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         stopTimers()
         audioRecorder?.stop()
         
+        // Reset HUD to clean state before showing processing
+        HUD.hideAndReset()
+        
+        // Small delay to ensure UI state is clean
+        try? await Task.sleep(nanoseconds: 25_000_000) // 25ms
+        
         // Restore system volume BEFORE playing stop sound
         if isVolumeControlEnabled {
             setSystemVolume(to: previousVolume)
@@ -355,7 +366,7 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         // Play stop recording sound after volume is restored
         playStopRecordingSound()
         
-        // Show processing immediately after all recording state is cleared
+        // Show processing after HUD reset
         HUD.show("Processing audio...")
         
         if let audioURL = audioRecorder?.url {
@@ -422,10 +433,25 @@ class VoiceRecordingManager: NSObject, ObservableObject {
     }
     
     private func stopTimers() {
-        recordingTimer?.invalidate()
-        levelTimer?.invalidate()
-        recordingTimer = nil
-        levelTimer = nil
+        print("🕰️ Stopping timers...")
+        
+        // Safely invalidate timers
+        if let recordingTimer = recordingTimer {
+            recordingTimer.invalidate()
+            self.recordingTimer = nil
+            print("✅ Recording timer stopped")
+        }
+        
+        if let levelTimer = levelTimer {
+            levelTimer.invalidate()
+            self.levelTimer = nil
+            print("✅ Level timer stopped")
+        }
+        
+        // Reset audio level to prevent lingering animations
+        DispatchQueue.main.async {
+            self.audioLevel = 0.0
+        }
     }
     
     private func processRecording(audioURL: URL, duration: TimeInterval) async {
