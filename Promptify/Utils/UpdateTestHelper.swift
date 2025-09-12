@@ -18,6 +18,7 @@ struct UpdateTestHelper {
     }
     
     /// Test the permission diagnostic system
+    @MainActor
     static func testPermissionDiagnostic() {
         print("🧪 Testing permission diagnostic...")
         
@@ -30,6 +31,7 @@ struct UpdateTestHelper {
     }
     
     /// Test settings migration
+    @MainActor  
     static func testSettingsMigration() {
         print("🧪 Testing settings migration...")
         

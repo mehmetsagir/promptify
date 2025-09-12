@@ -332,6 +332,10 @@ class VoiceRecordingManager: NSObject, ObservableObject {
     func stopRecording() async {
         guard isRecording else { return }
         
+        // Store the duration before clearing state
+        let finalDuration = recordingDuration
+        let _ = recordingStartTime
+        
         // First set recording state to false to stop UI updates
         isRecording = false
         audioLevel = 0.0
@@ -357,8 +361,8 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         if let audioURL = audioRecorder?.url {
             print("🎤 Stopped recording: \(audioURL.lastPathComponent)")
             
-            // Process the recorded audio
-            await processRecording(audioURL: audioURL)
+            // Process the recorded audio with the correct duration
+            await processRecording(audioURL: audioURL, duration: finalDuration)
         }
         
         audioRecorder = nil
@@ -424,7 +428,7 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         levelTimer = nil
     }
     
-    private func processRecording(audioURL: URL) async {
+    private func processRecording(audioURL: URL, duration: TimeInterval) async {
         // Check if we detected any meaningful audio during recording
         guard hasDetectedAudio else {
             print("🔇 No audio detected during recording, skipping transcription")
@@ -438,8 +442,8 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         }
         
         // Also check minimum recording duration if audio was detected
-        guard recordingDuration >= minSpeechDuration else {
-            print("🔇 Recording too short (\(recordingDuration)s), skipping transcription")
+        guard duration >= minSpeechDuration else {
+            print("🔇 Recording too short (\(duration)s), skipping transcription")
             
             // Clean up the audio file
             try? FileManager.default.removeItem(at: audioURL)
@@ -449,7 +453,7 @@ class VoiceRecordingManager: NSObject, ObservableObject {
             return
         }
         
-        print("🎤 Processing audio recording with duration: \(recordingDuration)s")
+        print("🎤 Processing audio recording with duration: \(duration)s")
         
         // Here we'll send the audio to OpenAI Whisper API
         do {
