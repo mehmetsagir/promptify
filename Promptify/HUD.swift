@@ -63,7 +63,7 @@ final class HUD {
         hosting?.rootView = HUDView(mode: .voiceRecording(duration: duration, audioLevel: audioLevel), onCopy: nil, onClose: nil)
         hosting?.needsLayout = true
         panel?.title = ""
-        panel?.setContentSize(NSSize(width: 280, height: 44))
+        panel?.setContentSize(NSSize(width: 320, height: 44)) // Increased width to prevent truncation
         centerBottom()
         panel?.makeKeyAndOrderFront(nil)
     }
@@ -367,10 +367,12 @@ struct HUDView: View {
                 Text("Recording...")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(.white)
+                    .fixedSize(horizontal: true, vertical: false) // Prevent truncation
                 
                 Text(formatDuration(duration))
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.white.opacity(0.8))
+                    .fixedSize(horizontal: true, vertical: false) // Prevent truncation
             }
             
             Spacer()

@@ -1,0 +1,20 @@
+# <type>: <description>
+#
+# <body>
+#
+# <footer>
+
+# Type can be:
+#   feat     (new feature)
+#   fix      (bug fix)
+#   docs     (documentation)
+#   style    (formatting, no code change)
+#   refactor (code change that neither fixes a bug nor adds a feature)
+#   test     (adding missing tests)
+#   chore    (maintain)
+
+# Examples:
+#   feat: add voice recording hotkeys
+#   fix: resolve clipboard access issue on macOS 14
+#   docs: update installation instructions
+#   refactor: split AppState into smaller modules

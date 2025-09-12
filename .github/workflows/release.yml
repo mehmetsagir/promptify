@@ -1,10 +1,19 @@
-name: Build and Release
+name: 🚀 Automated Release & Notification
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'  # Semantic versioning: v1.0.0, v2.1.3, etc.
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+      send_notifications:
+        description: 'Send push notifications to users'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -92,15 +101,76 @@ jobs:
           ./Promptify-${{ steps.tag_name.outputs.TAG_NAME }}.zip
         body: |
           ## Changes in this release
-          - Settings UI improvements and reorganization
-          - Enhanced translation features
-          - Better user experience with faster popups
+          - Auto-update system with in-app installation
+          - Permission diagnostic and sync system
+          - Enhanced notification system for updates
+          - Settings migration and backup system
+          - Improved code organization and modularity
           
           ## Installation
           1. Download the DMG file below
           2. Open it and drag Promptify.app to Applications folder
           3. Run the app and grant accessibility permissions when prompted
+          4. Future updates will be available through the in-app update system
           
           ## Requirements
           - macOS 12.0 or later
           - OpenAI API key (get one from https://platform.openai.com)
+          
+          ## Auto-Update System
+          This version includes a new auto-update system that allows users to update directly within the app without manual reinstallation.
+
+    - name: Send Push Notifications
+      if: startsWith(github.ref, 'refs/tags/') && inputs.send_notifications
+      run: |
+        echo "🔔 Sending push notifications to users..."
+        
+        # Extract version from tag
+        VERSION=${{ steps.tag_name.outputs.TAG_NAME }}
+        VERSION_NUMBER=${VERSION#v}  # Remove 'v' prefix
+        
+        # Get download URLs from the release
+        DMG_URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}/Promptify-${VERSION}.dmg"
+        ZIP_URL="https://github.com/${{ github.repository }}/releases/download/${VERSION}/Promptify-${VERSION}.zip"
+        
+        # Notification payload
+        NOTIFICATION_PAYLOAD=$(cat <<EOF
+        {
+          "title": "Promptify Update Available",
+          "body": "Version ${VERSION_NUMBER} is now available with auto-update support",
+          "version": "${VERSION_NUMBER}",
+          "downloadUrl": "${DMG_URL}",
+          "releaseUrl": "https://github.com/${{ github.repository }}/releases/tag/${VERSION}",
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        }
+        EOF
+        )
+        
+        echo "Notification payload:"
+        echo "$NOTIFICATION_PAYLOAD"
+        
+        # Send to webhook endpoints (if configured)
+        if [ ! -z "${{ secrets.WEBHOOK_URL }}" ]; then
+          echo "Sending to webhook endpoint..."
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+            -d "$NOTIFICATION_PAYLOAD" \
+            "${{ secrets.WEBHOOK_URL }}"
+          echo "✅ Webhook notification sent"
+        else
+          echo "ℹ️ No webhook URL configured, skipping push notifications"
+        fi
+        
+        # Log notification for users who check manually
+        echo "📱 Users will be notified through RemoteNotificationService polling"
+
+    - name: Update Release Statistics
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        echo "📊 Recording release statistics..."
+        echo "Release: ${{ steps.tag_name.outputs.TAG_NAME }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Commit: ${{ github.sha }}"
+        echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "Workflow: ${{ github.run_id }}"

@@ -14,6 +14,17 @@ class AppInstances: ObservableObject {
         self.appState = AppState()
         self.settingsManager = SettingsWindowManager()
         self.updateManager = UpdateManager()
+        
+        // Check for updates at startup
+        Task {
+            await self.updateManager.checkForUpdates(performCleanup: false)
+        }
+        
+        // Start remote notification monitoring for updates
+        RemoteNotificationService.shared.startMonitoring()
+        
+        // Request notification permissions
+        NotificationService.shared
     }
 }
 
@@ -47,7 +58,7 @@ struct PromptifyApp: App {
                 
                 // Update button (only if update available)
                 if instances.updateManager.hasUpdate {
-                    Button("Update Available (v\(instances.updateManager.latestVersion))") {
+                    Button("🚀 Update Available (v\(instances.updateManager.latestVersion))") {
                         instances.updateManager.downloadAndInstallUpdate()
                     }
                     .foregroundColor(.orange)

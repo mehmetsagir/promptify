@@ -332,6 +332,13 @@ class VoiceRecordingManager: NSObject, ObservableObject {
     func stopRecording() async {
         guard isRecording else { return }
         
+        // First set recording state to false to stop UI updates
+        isRecording = false
+        audioLevel = 0.0
+        recordingDuration = 0.0
+        recordingStartTime = nil
+        
+        // Stop timers to prevent any further UI updates
         stopTimers()
         audioRecorder?.stop()
         
@@ -344,7 +351,7 @@ class VoiceRecordingManager: NSObject, ObservableObject {
         // Play stop recording sound after volume is restored
         playStopRecordingSound()
         
-        // Show processing immediately
+        // Show processing immediately after all recording state is cleared
         HUD.show("Processing audio...")
         
         if let audioURL = audioRecorder?.url {
@@ -354,10 +361,6 @@ class VoiceRecordingManager: NSObject, ObservableObject {
             await processRecording(audioURL: audioURL)
         }
         
-        isRecording = false
-        audioLevel = 0.0
-        recordingDuration = 0.0
-        recordingStartTime = nil
         audioRecorder = nil
     }
     

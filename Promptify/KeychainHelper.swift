@@ -32,14 +32,14 @@ enum KeychainHelper {
     }
     
     static func save(apiKey key: String) {
-        // önce varsa sil
+        // Delete existing key if present
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account
         ]
         SecItemDelete(query as CFDictionary)
-        // ekle
+        // Add new key
         guard let keyData = key.data(using: .utf8) else {
             print("Failed to convert API key to UTF-8 data")
             return

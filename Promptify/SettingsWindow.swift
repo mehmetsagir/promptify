@@ -54,6 +54,10 @@ struct SettingsView: View {
     @State private var hasInputMonitoring = Permission.hasInputMonitoring()
     @State private var hasMicrophone = Permission.hasMicrophone
     @State private var permissionTimer: Timer?
+    
+    // Auto-update service
+    @StateObject private var autoUpdateService = AutoUpdateService(updateManager: UpdateManager())
+    @StateObject private var progressWindowManager = UpdateProgressWindowManager()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -75,6 +79,7 @@ struct SettingsView: View {
                 Text("Enhancement").tag(1)
                 Text("Translation").tag(2)
                 Text("Voice").tag(3)
+                Text("Diagnostics").tag(4)
             }
             .pickerStyle(.segmented)
             .frame(maxWidth: .infinity)
@@ -86,8 +91,10 @@ struct SettingsView: View {
                 controlsEnhancementTab
             } else if selectedTab == 2 {
                 translationTab
-            } else {
+            } else if selectedTab == 3 {
                 voiceRecordingTab
+            } else {
+                diagnosticsTab
             }
             
             Spacer()
@@ -784,6 +791,242 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 }
+            }
+            .padding(.top, 1)
+        }
+    }
+    
+    var diagnosticsTab: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Permission Diagnostics
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Permission Diagnostics")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    Text("If you're experiencing permission issues, use these tools to diagnose and fix problems.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    VStack(spacing: 8) {
+                        Button("🔍 Run Permission Diagnostic") {
+                            let _ = PermissionDiagnostic.performDiagnostic()
+                            
+                            let alert = NSAlert()
+                            alert.messageText = "Permission Diagnostic Complete"
+                            alert.informativeText = "Check the console output for detailed results. If issues persist, try the reset option below."
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
+                        }
+                        .frame(maxWidth: .infinity)
+                        
+                        Button("🧹 Reset Permission State") {
+                            let alert = NSAlert()
+                            alert.messageText = "Reset Permission State"
+                            alert.informativeText = "This will clear all cached permission states and force fresh checks. You may need to re-grant permissions. Continue?"
+                            alert.alertStyle = .warning
+                            alert.addButton(withTitle: "Reset")
+                            alert.addButton(withTitle: "Cancel")
+                            
+                            if alert.runModal() == .alertFirstButtonReturn {
+                                PermissionDiagnostic.resetPermissionState()
+                                
+                                // Refresh permission states
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    self.hasAccessibility = Permission.hasAccessibility
+                                    self.hasInputMonitoring = Permission.hasInputMonitoring()
+                                    self.hasMicrophone = Permission.hasMicrophone
+                                }
+                                
+                                let successAlert = NSAlert()
+                                successAlert.messageText = "Permission State Reset"
+                                successAlert.informativeText = "Permission cache has been cleared. Please check the permissions section below and re-grant any missing permissions."
+                                successAlert.addButton(withTitle: "OK")
+                                successAlert.runModal()
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
+                
+                Divider()
+                
+                // Update Management
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Update Management")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Current Version:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
+                                .font(.body)
+                                .fontWeight(.medium)
+                        }
+                        
+                        Spacer()
+                        
+                        if updateManager.hasUpdate {
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("Update Available:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text("v\(updateManager.latestVersion)")
+                                    .font(.body)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.green)
+                            }
+                        }
+                    }
+                    
+                    VStack(spacing: 8) {
+                        Button(updateManager.isCheckingForUpdates ? "🔄 Checking..." : "🔍 Check for Updates") {
+                            Task {
+                                await updateManager.checkForUpdates(performCleanup: true)
+                            }
+                        }
+                        .disabled(updateManager.isCheckingForUpdates)
+                        .frame(maxWidth: .infinity)
+                        
+                        if updateManager.hasUpdate {
+                            Button(autoUpdateService.isUpdating ? "🔄 Installing..." : "🚀 Install Update Automatically") {
+                                progressWindowManager.showUpdateProgress(autoUpdateService)
+                                Task {
+                                    await autoUpdateService.performAutomaticUpdate()
+                                }
+                            }
+                            .disabled(autoUpdateService.isUpdating)
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button("📥 Manual Download") {
+                                updateManager.openLatestRelease()
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    if autoUpdateService.isUpdating {
+                        VStack(spacing: 4) {
+                            ProgressView("Installing update...", value: autoUpdateService.updateProgress, total: 1.0)
+                                .progressViewStyle(LinearProgressViewStyle())
+                            
+                            Text(autoUpdateService.updateStatus)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.top, 4)
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
+                
+                Divider()
+                
+                // Settings Management
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Settings Management")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    Text("Backup and restore your app settings.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    VStack(spacing: 8) {
+                        Button("💾 Backup Settings") {
+                            SettingsMigrator.createBackup()
+                            
+                            let alert = NSAlert()
+                            alert.messageText = "Settings Backed Up"
+                            alert.informativeText = "Your current settings have been backed up. They will be automatically restored if needed during updates."
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
+                        }
+                        .frame(maxWidth: .infinity)
+                        
+                        Button("🔧 Validate & Fix Settings") {
+                            SettingsMigrator.validateAndFixSettings()
+                            
+                            let alert = NSAlert()
+                            alert.messageText = "Settings Validation Complete"
+                            alert.informativeText = "Your settings have been validated and any issues have been fixed."
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
+                        }
+                        .frame(maxWidth: .infinity)
+                        
+                        Button("🧹 Clean Up Old Settings") {
+                            SettingsMigrator.cleanupDeprecatedSettings()
+                            
+                            let alert = NSAlert()
+                            alert.messageText = "Cleanup Complete"
+                            alert.informativeText = "Deprecated settings have been removed from your system."
+                            alert.addButton(withTitle: "OK")
+                            alert.runModal()
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
+                
+                Divider()
+                
+                // System Information
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("System Information")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text("macOS Version:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(ProcessInfo.processInfo.operatingSystemVersionString)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        
+                        HStack {
+                            Text("Bundle ID:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(Bundle.main.bundleIdentifier ?? "Unknown")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                        
+                        HStack {
+                            Text("Build Number:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.horizontal, 12)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
             }
             .padding(.top, 1)
         }
