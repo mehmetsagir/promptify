@@ -24,7 +24,7 @@ class AppInstances: ObservableObject {
         RemoteNotificationService.shared.startMonitoring()
         
         // Request notification permissions
-        NotificationService.shared
+        _ = NotificationService.shared
     }
 }
 
@@ -49,7 +49,7 @@ struct PromptifyApp: App {
                 .buttonStyle(.borderedProminent)
                 
                 // Translation button (only if enabled)
-                if instances.appState.translationEnabled {
+                if instances.appState.hotkeyConfig.translationEnabled {
                     Button("Translate (⌥⌘T)") {
                         Task { await instances.appState.runTranslation() }
                     }
@@ -59,7 +59,9 @@ struct PromptifyApp: App {
                 // Update button (only if update available)
                 if instances.updateManager.hasUpdate {
                     Button("🚀 Update Available (v\(instances.updateManager.latestVersion))") {
-                        instances.updateManager.downloadAndInstallUpdate()
+                        Task {
+                            await instances.updateManager.downloadAndInstallUpdate()
+                        }
                     }
                     .foregroundColor(.orange)
                     .fontWeight(.semibold)

@@ -270,7 +270,7 @@ struct SettingsView: View {
                     Text("AI Model")
                         .font(.headline)
                     
-                    Picker("", selection: $appState.selectedModel) {
+                    Picker("", selection: $appState.configuration.selectedModel) {
                         Text("GPT-3.5 Turbo (Fast & Cheap)").tag("gpt-3.5-turbo")
                         Text("GPT-4 (Better Quality)").tag("gpt-4")
                         Text("GPT-4 Turbo").tag("gpt-4-turbo-preview")
@@ -291,12 +291,12 @@ struct SettingsView: View {
                             SecureField("sk-...", text: $tempApiKey)
                                 .textFieldStyle(.roundedBorder)
                                 .onAppear {
-                                    tempApiKey = appState.apiKey
+                                    tempApiKey = appState.configuration.apiKey
                                 }
                         } else {
                             HStack {
-                                Text(appState.apiKey.isEmpty ? "Not set" : "••••••••••••••••")
-                                    .foregroundColor(appState.apiKey.isEmpty ? .secondary : .primary)
+                                Text(appState.configuration.apiKey.isEmpty ? "Not set" : "••••••••••••••••")
+                                    .foregroundColor(appState.configuration.apiKey.isEmpty ? .secondary : .primary)
                                 Spacer()
                             }
                             .frame(height: 22)
@@ -311,7 +311,7 @@ struct SettingsView: View {
                         
                         Button(showingApiKey ? "Save" : "Edit") {
                             if showingApiKey {
-                                appState.apiKey = tempApiKey
+                                appState.configuration.apiKey = tempApiKey
                                 KeychainHelper.save(apiKey: tempApiKey)
                             }
                             showingApiKey.toggle()
@@ -321,16 +321,16 @@ struct SettingsView: View {
                         
                         if showingApiKey {
                             Button("Cancel") {
-                                tempApiKey = appState.apiKey
+                                tempApiKey = appState.configuration.apiKey
                                 showingApiKey = false
                             }
                             .controlSize(.small)
                         }
                     }
                     
-                    if !appState.apiKey.isEmpty {
+                    if !appState.configuration.apiKey.isEmpty {
                         Button("Clear API Key") {
-                            appState.apiKey = ""
+                            appState.configuration.apiKey = ""
                             tempApiKey = ""
                             KeychainHelper.delete()
                             showingApiKey = false
@@ -351,16 +351,16 @@ struct SettingsView: View {
                     Text("General")
                         .font(.headline)
                     
-                    Toggle("Launch at login", isOn: $appState.launchAtLogin)
+                    Toggle("Launch at login", isOn: $appState.configuration.launchAtLogin)
                         .help("Automatically start Promptify when you log in to macOS")
                     
-                    Toggle("Hide from Dock", isOn: $appState.hideFromDock)
+                    Toggle("Hide from Dock", isOn: $appState.configuration.hideFromDock)
                         .help("Run as menu bar only app - hide icon from Dock like Health Doctor and other menu bar apps")
                     
-                    Toggle("Use clipboard as fallback", isOn: $appState.useClipboardFallback)
+                    Toggle("Use clipboard as fallback", isOn: $appState.configuration.useClipboardFallback)
                         .help("If no text is selected, use clipboard content as fallback for processing.")
                     
-                    Toggle("Enable audio feedback", isOn: $appState.enableAudioFeedback)
+                    Toggle("Enable audio feedback", isOn: $appState.configuration.enableAudioFeedback)
                         .help("Play sounds for recording start/stop, completion notifications, and other audio cues throughout the app.")
                 }
                 
@@ -400,7 +400,9 @@ struct SettingsView: View {
                         
                         if updateManager.hasUpdate {
                             Button("Update Now") {
-                                updateManager.downloadAndInstallUpdate()
+                                Task {
+                                    await updateManager.downloadAndInstallUpdate()
+                                }
                             }
                             .buttonStyle(.borderedProminent)
                             .controlSize(.small)
@@ -432,8 +434,8 @@ struct SettingsView: View {
                         Text("Enhance Prompt:")
                         
                         HotkeyRecorder(
-                            key: $appState.customHotkeyKey,
-                            modifiers: $appState.customHotkeyModifiers
+                            key: $appState.hotkeyConfig.customHotkeyKey,
+                            modifiers: $appState.hotkeyConfig.customHotkeyModifiers
                         )
                         .frame(height: 34)
                         .frame(maxWidth: .infinity)
@@ -451,7 +453,7 @@ struct SettingsView: View {
                     Text("Prompt Enhancement")
                         .font(.headline)
                     
-                    Toggle("Auto-translate to English", isOn: $appState.autoTranslate)
+                    Toggle("Auto-translate to English", isOn: $appState.configuration.autoTranslate)
                         .help("Always output enhanced prompts in English regardless of input language")
                 }
             }
@@ -467,11 +469,11 @@ struct SettingsView: View {
                     Text("Translation")
                         .font(.headline)
                     
-                    Toggle("Enable translation", isOn: $appState.translationEnabled)
+                    Toggle("Enable translation", isOn: $appState.hotkeyConfig.translationEnabled)
                         .help("Add translation capability with separate hotkey")
                 }
                 
-                if appState.translationEnabled {
+                if appState.hotkeyConfig.translationEnabled {
                     Divider()
                     
                     // Language Selection
@@ -482,7 +484,7 @@ struct SettingsView: View {
                         HStack(spacing: 16) {
                             HStack {
                                 Text("From:")
-                                Picker("", selection: $appState.sourceLanguage) {
+                                Picker("", selection: $appState.translationConfig.sourceLanguage) {
                                     Text("🇹🇷 Turkish").tag("Turkish")
                                     Text("🇺🇸 English").tag("English")
                                     Text("🇩🇪 German").tag("German")
@@ -534,7 +536,7 @@ struct SettingsView: View {
                             
                             HStack {
                                 Text("To:")
-                                Picker("", selection: $appState.targetLanguage) {
+                                Picker("", selection: $appState.translationConfig.targetLanguage) {
                                     Text("🇺🇸 English").tag("English")
                                     Text("🇹🇷 Turkish").tag("Turkish")
                                     Text("🇩🇪 German").tag("German")
@@ -596,8 +598,8 @@ struct SettingsView: View {
                             .font(.headline)
                         
                         HotkeyRecorder(
-                            key: $appState.translationHotkeyKey,
-                            modifiers: $appState.translationHotkeyModifiers
+                            key: $appState.hotkeyConfig.translationHotkeyKey,
+                            modifiers: $appState.hotkeyConfig.translationHotkeyModifiers
                         )
                         .frame(height: 34)
                         .frame(maxWidth: .infinity)
@@ -708,8 +710,8 @@ struct SettingsView: View {
                                 .fontWeight(.medium)
                             
                             HotkeyRecorder(
-                                key: $appState.voiceEnhancementHotkeyKey,
-                                modifiers: $appState.voiceEnhancementHotkeyModifiers
+                                key: $appState.hotkeyConfig.voiceEnhancementHotkeyKey,
+                                modifiers: $appState.hotkeyConfig.voiceEnhancementHotkeyModifiers
                             )
                             .frame(height: 34)
                             .frame(maxWidth: .infinity)
@@ -743,8 +745,8 @@ struct SettingsView: View {
                                 .fontWeight(.medium)
                             
                             HotkeyRecorder(
-                                key: $appState.voiceTranslationHotkeyKey,
-                                modifiers: $appState.voiceTranslationHotkeyModifiers
+                                key: $appState.hotkeyConfig.voiceTranslationHotkeyKey,
+                                modifiers: $appState.hotkeyConfig.voiceTranslationHotkeyModifiers
                             )
                             .frame(height: 34)
                             .frame(maxWidth: .infinity)

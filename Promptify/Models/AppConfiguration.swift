@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import ServiceManagement
 
 /// App-wide configuration and user defaults management
 @MainActor

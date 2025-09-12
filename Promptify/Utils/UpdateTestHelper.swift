@@ -5,6 +5,7 @@ import Foundation
 struct UpdateTestHelper {
     
     /// Simulate update availability for testing
+    @MainActor
     static func simulateUpdateAvailable() {
         print("🧪 Simulating update available...")
         
@@ -62,6 +63,7 @@ struct UpdateTestHelper {
     }
     
     /// Test update flow with safe mock operations
+    @MainActor
     static func testUpdateFlowSafe() {
         print("🧪 Testing update flow (safe mode)...")
         
